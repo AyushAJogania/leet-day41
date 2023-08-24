@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> result;
+        int n = words.size();
+        int i = 0;
+        
+        while (i < n) {
+            int lineStart = i;
+            int lineLength = words[i].size();
+            i++;
+            
+            while (i < n && lineLength + words[i].size() + (i - lineStart) <= maxWidth) {
+                lineLength += words[i].size();
+                i++;
+            }
+            
+            int numWords = i - lineStart;
+            int numSpaces = maxWidth - lineLength;
+            
+            string line = words[lineStart];
+            
+            if (numWords == 1 || i == n) {
+                for (int j = lineStart + 1; j < i; j++) {
+                    line += " " + words[j];
+                }
+                line += string(maxWidth - line.size(), ' ');
+            } else {
+                int spaceBetweenWords = numSpaces / (numWords - 1);
+                int extraSpaces = numSpaces % (numWords - 1);
+                
+                for (int j = lineStart + 1; j < i; j++) {
+                    int spaces = j - lineStart <= extraSpaces ? spaceBetweenWords + 1 : spaceBetweenWords;
+                    line += string(spaces, ' ') + words[j];
+                }
+            }
+            
+            result.push_back(line);
+        }
+        
+        return result;
+    }
+};
